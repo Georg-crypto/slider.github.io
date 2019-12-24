@@ -17,6 +17,59 @@
     position: absolute;
     transition: all ease 1s;
     left: 0;
-    top: 0;    
+    top: 0;
+    z-index: 1;    
     
 }
+
+.arrow {
+
+    width: 30px;
+    height: 60px;
+    position: absolute;
+    top: 226px;
+    background-color: #90979A;
+    z-index: 2;
+    text-align: center;
+    font-size: 50px;
+    cursor: pointer; 
+        
+}
+
+.left {
+
+    left: 3px;
+
+}
+
+.right {
+
+    right: 3px;
+
+}
+
+.bottom_circles {
+
+    position: absolute;
+    bottom: 3px;
+    margin-left: 156px;
+    width: 200px;
+    height: 20px;
+    z-index: 2;
+    
+}
+
+.cicle {
+
+    border: 2px solid black;
+    margin-left: 23px;
+    width: 5px;
+    height: 5px;
+    border-radius: 100%;
+    display: inline-block;
+    cursor: pointer;
+        
+}
+
+
+

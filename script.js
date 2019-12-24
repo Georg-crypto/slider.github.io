@@ -1,6 +1,7 @@
 let images = document.querySelectorAll('.slide-single');
 let slide = document.querySelector('#slide');
-console.log(images);
+let leftArrow = document.querySelector('.left');
+
 let image = [];
 
 for (let i = 0; i < images.length; i++) {
@@ -9,8 +10,6 @@ for (let i = 0; i < images.length; i++) {
     images[i].remove();
 
 }
-
-console.log(image);
 
 let step = 0;
 let offset = 0;
@@ -36,9 +35,12 @@ function draw() {
 
 }
 
+
+// Add click event to left arrow, that shifts image to the left...
+
 function left() {
 
-    document.onclick = null;
+    leftArrow.onclick = null;
 
     let images2 = document.querySelectorAll('.slide-single');
     let offset2 = 0;
@@ -54,12 +56,90 @@ function left() {
 
         images2[0].remove();
         draw();
-        document.onclick = left;
+        leftArrow.onclick = left;
 
     }, 1000);
 
 }
 
 draw(); draw();
-document.onclick = left;
+
+leftArrow.onclick = left; // Add click event to left arrow, that shifts image to the left
+
+let arrow = document.querySelectorAll('.arrow');
+let bottom_circles = document.querySelector('.bottom_circles');
+
+
+// Show arrows and bottom cicles (mouseover slide)
+
+let opacityValue = 0;
+
+slide.addEventListener('mouseenter', mouseon);
+
+function mouseon() {
+
+    arrow[0].hidden = false;
+    opacityOn(arrow[0]);
+
+    arrow[1].hidden = false;
+    opacityOn(arrow[1]);
+
+    bottom_circles.hidden = false;
+    opacityOn(bottom_circles);
+
+    function opacityOn(a) {
+
+        opacityValue += 0.08;
+        a.style.opacity = opacityValue;
+
+        if (opacityValue > 1) { return; }
+
+        setTimeout(function () {
+
+            opacityOn(a);
+
+        }, 50);
+
+    }
+
+}
+
+
+// Hide arrows and bottom cicles (mouseover slide)
+
+slide.addEventListener('mouseleave', mouseoff);
+
+function mouseoff() {
+
+    opacityOff(arrow[0]);
+
+    opacityOff(arrow[1]);
+
+    opacityOff(bottom_circles);
+
+    function opacityOff(a) {
+
+        opacityValue -= 0.08;
+        a.style.opacity = opacityValue;
+
+        if (opacityValue < 0) { return; }
+
+        setTimeout(function () {
+
+            opacityOff(a);
+
+        }, 50);
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
 
