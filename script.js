@@ -1,6 +1,7 @@
 let images = document.querySelectorAll('.slide-single');
 let slide = document.querySelector('#slide');
 let leftArrow = document.querySelector('.left');
+let rightArrow = document.querySelector('.right');
 
 let image = [];
 
@@ -11,66 +12,205 @@ for (let i = 0; i < images.length; i++) {
 
 }
 
-let step = 0;
-let offset = 0;
+console.log(image);
 
-function draw() {
+
+// Add click event to left arrow, that shifts image to the left
+
+leftArrow.onclick = left;
+
+let stepLeft = 0;
+
+function drawLeft() {
 
     let img = document.createElement('img');
-    img.src = image[step];
+    img.src = image[stepLeft];
     img.setAttribute('class', 'slide-single');
-    img.style.left = offset * 515 + 'px';
+    img.style.left = 515 + 'px';
     slide.append(img);
-
-    if (step + 1 == image.length) {
-
-        step = 0;
-
-    } else {
-
-        step++;
-
-    }
-    offset = 1;
 
 }
 
-
-// Add click event to left arrow, that shifts image to the left...
 
 function left() {
 
     leftArrow.onclick = null;
 
-    let images2 = document.querySelectorAll('.slide-single');
-    let offset2 = 0;
+    let images2 = document.querySelector('.slide-single');
 
-    for (let i = 0; i < images2.length; i++) {
+    for (let i = 0; i < image.length; i++) {
 
-        images2[i].style.left = offset2 * 515 - 515 + 'px';
-        offset2++;
+        if (images2.src == image[i]) {
+
+            if (i == 4) {
+
+                stepLeft = 0;
+
+            } else {
+
+                stepLeft = i + 1;
+
+            }
+
+        }
+
+    }
+
+    shiftLeftDel();
+    drawLeft();
+    setTimeout(function () { shiftLeftAdd(); }, 600);
+    leftArrow.onclick = left;
+
+}
+
+
+
+drawLeft();
+shiftLeftAdd();
+
+function shiftLeftAdd() {
+
+    let img = document.querySelector('.slide-single');
+
+    for (let i = 515; i >= 0; i--) {
+
+        setTimeout(function () {
+
+            img.style.left = i + 'px';
+
+        }, 1);
+
+    }
+
+}
+
+function shiftLeftDel() {
+
+    let img = document.querySelector('.slide-single');
+
+    for (let i = 0; i > -515; i--) {
+
+        setTimeout(function () {
+
+            img.style.left = i + 'px';
+
+        }, 1);
 
     }
 
     setTimeout(function () {
 
-        images2[0].remove();
-        draw();
-        leftArrow.onclick = left;
+        img.remove();
 
-    }, 1000);
+    }, 600);
 
 }
 
-draw(); draw();
 
-leftArrow.onclick = left; // Add click event to left arrow, that shifts image to the left
+// Add click event to right arrow, that shifts image to the right
+
+let stepRight;
+
+rightArrow.onclick = right;
+
+function drawRight() {
+
+    let img = document.createElement('img');
+    img.src = image[stepRight];
+    img.setAttribute('class', 'slide-single');
+    img.style.left = -515 + 'px';
+    slide.append(img);
+
+    if (stepRight < 1) {
+
+        stepRight = 4;
+
+    } else {
+
+        stepRight--;
+
+    }
+
+}
+
+function right() {
+
+    rightArrow.onclick = null;
+
+    let imagesRight2 = document.querySelector('.slide-single');
+
+    for (let i = 0; i < images.length; i++) {
+
+        if (imagesRight2.src == image[i]) {
+
+            if (i == 0) {
+
+                stepRight = 4;
+
+            } else {
+
+                stepRight = i - 1;
+
+            }
+
+        }
+
+    }
+
+    shiftRightDel();
+
+    drawRight();
+
+    setTimeout(function () { shiftRightAdd(); }, 600);
+
+    rightArrow.onclick = right;
+
+}
+
+function shiftRightAdd() {
+
+    img = document.querySelector('.slide-single');
+
+    for (let i = -515; i <= 0; i++) {
+
+        setTimeout(function () {
+
+            img.style.left = i + 'px';
+
+        }, 1);
+
+    }
+
+}
+
+function shiftRightDel() {
+
+    img = document.querySelector('.slide-single');
+
+    for (let i = 0; i < 515; i++) {
+
+        setTimeout(function () {
+
+            img.style.left = i + 'px';
+
+        }, 1);
+
+    }
+
+    setTimeout(function () {
+
+        img.remove();
+
+    }, 600);
+
+}
+
+
+// Show arrows and bottom cicles (mouseover slide)
 
 let arrow = document.querySelectorAll('.arrow');
 let bottom_circles = document.querySelector('.bottom_circles');
 
-
-// Show arrows and bottom cicles (mouseover slide)
 
 let opacityValue = 0;
 
@@ -133,7 +273,6 @@ function mouseoff() {
     }
 
 }
-
 
 
 
