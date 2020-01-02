@@ -2,6 +2,14 @@ let images = document.querySelectorAll('.slide-single');
 let slide = document.querySelector('#slide');
 let leftArrow = document.querySelector('.left');
 let rightArrow = document.querySelector('.right');
+let timerIdLeft;
+let timerIdRight;
+let circle = document.querySelectorAll('.circle');
+let idLeft;
+let idRight;
+
+mouseover_bottom_circles();
+mouseout_bottom_circles();
 
 let image = [];
 
@@ -23,10 +31,12 @@ let stepLeft = 0;
 
 function drawLeft() {
 
+    idLeft = 1;
+    idRight = 0;
     let img = document.createElement('img');
     img.src = image[stepLeft];
     img.setAttribute('class', 'slide-single');
-    img.style.left = 515 + 'px';
+    img.style.left = -515 + 'px';
     slide.append(img);
 
 }
@@ -35,6 +45,11 @@ function drawLeft() {
 function left() {
 
     leftArrow.onclick = null;
+
+    black_circles();
+
+    clearTimeout(timerIdLeft);
+    clearTimeout(timerIdRight);
 
     let images2 = document.querySelector('.slide-single');
 
@@ -61,48 +76,33 @@ function left() {
     setTimeout(function () { shiftLeftAdd(); }, 600);
     leftArrow.onclick = left;
 
+    timerIdLeft = setTimeout(function run() {
+        left();
+    }, 5000);
+
 }
 
-
-
 drawLeft();
-shiftLeftAdd();
+setTimeout(function () { shiftLeftAdd(); });
+
+timerIdLeft = setTimeout(function run() {
+    left();
+}, 5000);
+
 
 function shiftLeftAdd() {
 
     let img = document.querySelector('.slide-single');
-
-    for (let i = 515; i >= 0; i--) {
-
-        setTimeout(function () {
-
-            img.style.left = i + 'px';
-
-        }, 1);
-
-    }
+    active_circle_left(stepLeft);
+    img.style.left = 0 + 'px';
 
 }
 
 function shiftLeftDel() {
 
     let img = document.querySelector('.slide-single');
-
-    for (let i = 0; i > -515; i--) {
-
-        setTimeout(function () {
-
-            img.style.left = i + 'px';
-
-        }, 1);
-
-    }
-
-    setTimeout(function () {
-
-        img.remove();
-
-    }, 600);
+    img.style.left = 515 + 'px';
+    setTimeout(function () { img.remove(); }, 600);
 
 }
 
@@ -115,10 +115,12 @@ rightArrow.onclick = right;
 
 function drawRight() {
 
+    idLeft = 0;
+    idRight = 1;
     let img = document.createElement('img');
     img.src = image[stepRight];
     img.setAttribute('class', 'slide-single');
-    img.style.left = -515 + 'px';
+    img.style.left = 515 + 'px';
     slide.append(img);
 
     if (stepRight < 1) {
@@ -136,6 +138,11 @@ function drawRight() {
 function right() {
 
     rightArrow.onclick = null;
+
+    black_circles();
+
+    clearTimeout(timerIdLeft);
+    clearTimeout(timerIdRight);
 
     let imagesRight2 = document.querySelector('.slide-single');
 
@@ -158,50 +165,32 @@ function right() {
     }
 
     shiftRightDel();
-
     drawRight();
-
     setTimeout(function () { shiftRightAdd(); }, 600);
 
     rightArrow.onclick = right;
+
+    timerIdRight = setTimeout(function run() {
+
+        right();
+
+    }, 5000);
 
 }
 
 function shiftRightAdd() {
 
     img = document.querySelector('.slide-single');
-
-    for (let i = -515; i <= 0; i++) {
-
-        setTimeout(function () {
-
-            img.style.left = i + 'px';
-
-        }, 1);
-
-    }
+    active_circle_right(stepRight);
+    img.style.left = 0 + 'px';
 
 }
 
 function shiftRightDel() {
 
     img = document.querySelector('.slide-single');
-
-    for (let i = 0; i < 515; i++) {
-
-        setTimeout(function () {
-
-            img.style.left = i + 'px';
-
-        }, 1);
-
-    }
-
-    setTimeout(function () {
-
-        img.remove();
-
-    }, 600);
+    img.style.left = -515 + 'px';
+    setTimeout(function () { img.remove(); }, 600);
 
 }
 
@@ -212,35 +201,15 @@ let arrow = document.querySelectorAll('.arrow');
 let bottom_circles = document.querySelector('.bottom_circles');
 
 
-let opacityValue = 0;
-
 slide.addEventListener('mouseenter', mouseon);
 
 function mouseon() {
 
-    arrow[0].hidden = false;
-    opacityOn(arrow[0]);
+    arrow[0].style.opacity = 1;
 
-    arrow[1].hidden = false;
-    opacityOn(arrow[1]);
+    arrow[1].style.opacity = 1;
 
-    bottom_circles.hidden = false;
-    opacityOn(bottom_circles);
-
-    function opacityOn(a) {
-
-        opacityValue += 0.08;
-        a.style.opacity = opacityValue;
-
-        if (opacityValue > 1) { return; }
-
-        setTimeout(function () {
-
-            opacityOn(a);
-
-        }, 50);
-
-    }
+    bottom_circles.style.opacity = 1;
 
 }
 
@@ -251,28 +220,171 @@ slide.addEventListener('mouseleave', mouseoff);
 
 function mouseoff() {
 
-    opacityOff(arrow[0]);
+    arrow[0].style.opacity = 0;
 
-    opacityOff(arrow[1]);
+    arrow[1].style.opacity = 0;
 
-    opacityOff(bottom_circles);
+    bottom_circles.style.opacity = 0;
 
-    function opacityOff(a) {
+}
 
-        opacityValue -= 0.08;
-        a.style.opacity = opacityValue;
+// White background of circles, when the corresponding picture appears
 
-        if (opacityValue < 0) { return; }
+function active_circle_left(a) {
 
-        setTimeout(function () {
+    for (let i = 0; i < circle.length; i++) {
 
-            opacityOff(a);
+        if (i == a) {
 
-        }, 50);
+            circle[i].style.backgroundColor = 'white';
+            circle[i].onmouseover = null;
+            circle[i].onmouseout = null;
+
+        }
 
     }
 
 }
+
+function active_circle_right(a) {
+
+    a++
+
+    if (a == 5) {
+
+        circle[0].style.backgroundColor = 'white';
+        circle[0].onmouseover = null;
+        circle[0].onmouseout = null;
+
+
+    } else {
+
+        for (let i = 0; i < circle.length; i++) {
+
+            if (i == a) {
+
+                circle[i].style.backgroundColor = 'white';
+                circle[i].onmouseover = null;
+                circle[i].onmouseout = null;
+
+            }
+
+        }
+
+    }
+
+}
+
+function black_circles() {
+
+    for (let i = 0; i < circle.length; i++) {
+
+        circle[i].style.backgroundColor = 'black';
+
+        circle[i].onmouseover = () => {
+
+            circle[i].style.backgroundColor = 'white';
+
+        }
+
+        circle[i].onmouseout = () => {
+
+            circle[i].style.backgroundColor = 'black';
+
+        }
+
+    }
+
+}
+
+// Mouseover and mouseout at bottom circles functions (white or black background)
+
+function mouseover_bottom_circles() {
+
+    for (let i = 0; i < circle.length; i++) {
+
+        circle[i].onmouseover = () => {
+
+            circle[i].style.backgroundColor = 'white';
+
+        }
+
+    }
+
+}
+
+function mouseout_bottom_circles() {
+
+    for (let i = 0; i < circle.length; i++) {
+
+        circle[i].onmouseout = () => {
+
+            circle[i].style.backgroundColor = 'black';
+
+        }
+
+    }
+
+}
+
+// Click event on bottom cicles
+
+click_bottom_cicles();
+
+function click_bottom_cicles() {
+
+    for (let i = 0; i < circle.length; i++) {
+
+        circle[i].onclick = () => {
+
+            for (let k = 0; k < image.length; k++) {
+
+                if (i == k) {
+
+                    if (idLeft == 1) {
+
+                        stepLeft = i;
+                        clearTimeout(timerIdLeft);
+                        black_circles();
+                        shiftLeftDel();
+                        drawLeft();
+                        setTimeout(function () { shiftLeftAdd(); }, 600);
+                        timerIdLeft = setTimeout(function run() {
+                            left();
+                        }, 5000);
+
+                    } else {
+
+                        stepRight = i;
+                        clearTimeout(timerIdRight);
+                        black_circles();
+                        shiftRightDel();
+                        drawRight();
+                        setTimeout(function () { shiftRightAdd(); }, 600);
+                        timerIdRight = setTimeout(function run() {
+                            right();
+                        }, 5000);
+
+                    }
+
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+
+
+
+
+
+
+
 
 
 
