@@ -1,5 +1,29 @@
-let images = document.querySelectorAll('.slide-single');
 let slide = document.querySelector('#slide');
+
+// ----------------------------------------------------------------
+
+// Transfirm object to/from JSON
+
+let mainImages = ['1.png', '2.png', '3.png', '4.png', '5.png'];
+
+let json = JSON.stringify(mainImages);
+
+let jsonValue = JSON.parse(json);
+
+console.log(jsonValue[0]);
+
+for (let i = 4; i >= 0; i--) {
+
+    let img = document.createElement('img');
+    img.src = 'images/' + jsonValue[i];
+    img.setAttribute('class', 'slide-single');
+    slide.prepend(img);
+
+};
+
+// ----------------------------------------------------------------
+
+let images = document.querySelectorAll('.slide-single');
 let leftArrow = document.querySelector('.left');
 let rightArrow = document.querySelector('.right');
 let timerIdLeft;
@@ -7,6 +31,7 @@ let timerIdRight;
 let circle = document.querySelectorAll('.circle');
 let idLeft;
 let idRight;
+let svg = document.querySelector('.svg');
 
 mouseover_bottom_circles();
 mouseout_bottom_circles();
@@ -87,7 +112,7 @@ setTimeout(function () { shiftLeftAdd(); });
 
 timerIdLeft = setTimeout(function run() {
     left();
-}, 5000);
+}, 4400);
 
 
 function shiftLeftAdd() {
@@ -95,6 +120,8 @@ function shiftLeftAdd() {
     let img = document.querySelector('.slide-single');
     active_circle_left(stepLeft);
     img.style.left = 0 + 'px';
+    setProgressToImg();
+    setTimeout(function () { svg.style.opacity = 1; }, 600);
 
 }
 
@@ -102,6 +129,8 @@ function shiftLeftDel() {
 
     let img = document.querySelector('.slide-single');
     img.style.left = 515 + 'px';
+    svg.style.opacity = 0;
+    clearInterval(timerIdPb);
     setTimeout(function () { img.remove(); }, 600);
 
 }
@@ -183,6 +212,8 @@ function shiftRightAdd() {
     img = document.querySelector('.slide-single');
     active_circle_right(stepRight);
     img.style.left = 0 + 'px';
+    setProgressToImg();
+    setTimeout(function () { svg.style.opacity = 1; }, 600);
 
 }
 
@@ -190,6 +221,8 @@ function shiftRightDel() {
 
     img = document.querySelector('.slide-single');
     img.style.left = -515 + 'px';
+    svg.style.opacity = 0;
+    clearInterval(timerIdPb);
     setTimeout(function () { img.remove(); }, 600);
 
 }
@@ -377,6 +410,41 @@ function click_bottom_cicles() {
     }
 
 }
+
+// Add round progress bar
+
+let circleProgressBar = document.querySelector('.progress-ring_circle');
+
+let radius = circleProgressBar.getAttribute('r');
+
+let circumference = 2 * Math.PI * radius;
+
+circleProgressBar.style.strokeDasharray = `${circumference} ${circumference}`;
+circleProgressBar.style.strokeDashoffset = circumference;
+
+let timerIdPb;
+
+function setProgressToImg() {
+
+    let xyz = 3;
+
+    timerIdPb = setInterval(setProgress, 125);
+
+    function setProgress() {
+
+        let offset = circumference - xyz / 100 * circumference;
+        circleProgressBar.style.strokeDashoffset = offset;
+        xyz += 3;
+
+    }
+
+}
+
+
+
+
+
+
 
 
 

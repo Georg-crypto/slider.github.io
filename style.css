@@ -84,6 +84,22 @@
         
 }
 
+.svg {
+
+    position: absolute;
+    z-index: 2;
+    right: 0;    
+
+}
+
+.progress-ring_circle {
+
+    transform-origin: center;
+    transform: rotate(-90deg);
+    transition: stroke-dashoffset 0.3s;
+    
+}
+
 
 
 
